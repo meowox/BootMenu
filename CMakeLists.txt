@@ -8,7 +8,7 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   endif()
 endif()
 
-project(EmergencyMount)
+project(BootMenu)
 include("$ENV{DOLCESDK}/share/dolce.cmake" REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -std=gnu99")
@@ -21,13 +21,13 @@ link_directories(
 
 add_executable(${PROJECT_NAME}
 	main.c
-	main.h
 	blit/blit.c
 	blit/font.c
 )
 
 target_link_libraries(${PROJECT_NAME}
-k
+		SceModulemgrForDriver_stub
+		SceSysclibForDriver_stub
 		SceCpuForDriver_stub 
 		SceSblAIMgrForDriver_stub 
 		SceUdcdForDriver_stub
@@ -37,6 +37,7 @@ k
         SceSysmemForDriver_stub
 		SceProcessmgrForKernel_stub
         SceThreadmgrForDriver_stub
+		SceRtcForDriver_stub
 
         SceIofilemgrForDriver_stub
         SceUsbstorVStorDriver_stub
@@ -52,11 +53,12 @@ k
 		SceProcessmgrForDriver_stub
 		taihenModuleUtils_stub
 		SceSysconForDriver_stub
+		taihen_stub
         -nostdlib
         gcc
 )
 dolce_create_self(${PROJECT_NAME}.skprx ${PROJECT_NAME}
   UNSAFE
-  CONFIG ${CMAKE_SOURCE_DIR}/EmergencyMount.yml
+  CONFIG ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.yml
 )
 

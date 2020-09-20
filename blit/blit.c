@@ -146,14 +146,14 @@ int blit_stringf(int sx, int sy, const char *msg, ...)
 	char string[512];
 
 	va_start(list, msg);
-	vsprintf(string, msg, list);
+	vsnprintf(string, 512, msg, list);
 	va_end(list);
 
 	return blit_string(sx, sy, string);
 }
 
 
-void draw_rectangle(uint32_t  x, uint32_t  y, uint32_t  w, uint32_t h, uint32_t  inColor)
+void blit_rect(uint32_t  x, uint32_t  y, uint32_t  w, uint32_t h, uint32_t  inColor)
 {
 	int i, j;
 	uint32_t  c1,c2;
