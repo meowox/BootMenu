@@ -8,21 +8,29 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   endif()
 endif()
 
-project(BootMenu)
+project(BootMenu C ASM)
 include("$ENV{DOLCESDK}/share/dolce.cmake" REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -std=gnu99")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${CMAKE_SOURCE_DIR}/bm-loader/payload_bootstrap.ld -nostdlib")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-rtti -fno-exceptions")
+
+message("Current dir is ${CMAKE_CURRENT_BINARY_DIR}")
 
 link_directories(
 	${CMAKE_CURRENT_BINARY_DIR}
+)
+
+add_executable(payload_bootstrap
+	bm-loader/payload_bootstrap.S 
 )
 
 add_executable(${PROJECT_NAME}
 	main.c
 	blit/blit.c
 	blit/font.c
+	bm-loader/ldr_main.c
+	bm-loader/resume.S
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -39,6 +47,7 @@ target_link_libraries(${PROJECT_NAME}
         SceThreadmgrForDriver_stub
 		SceRtcForDriver_stub
 
+		SceCpuForKernel_stub
         SceIofilemgrForDriver_stub
         SceUsbstorVStorDriver_stub
         SceCpuForDriver_stub
