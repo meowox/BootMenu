@@ -56,9 +56,9 @@ int menu_last_line;
 void drawArrow() {
 	//ksceDmacMemset(fb_addr, 0x00, SCREEN_PITCH * SCREEN_H * 4);
 		if (is_pstv) return; //PSTV doesn't have a menu
-		blit_set_color(0x00000000, 0x00000000);
+		blit_set_color(BLACK,BLACK);
 		for(int i = 1; i <= menusize; i++) blit_stringf((strlen(menu[i - 1]) + 2) * 16, i * 20 + menu_last_line, "<");
-		blit_set_color(0x00ffffff, 0x00000000);
+		blit_set_color(WHITE,BLACK);
 		blit_stringf((strlen(menu[menu_index - 1]) + 2) * 16, menu_index * 20 + menu_last_line, "<");
 }
 
@@ -180,8 +180,8 @@ int module_start(SceSize argc, const void *args) {
 	screen_print("    by teakhanirons    ");
 	screen_print("-----------------------");
 	if (!is_pstv){
-		for(int i = 0; i < menusize; i++) { screen_print(menu[i]); }
 		menu_last_line = blit_gadgets_getline();
+		for(int i = 0; i < menusize; i++) { screen_print(menu[i]); }
 		drawArrow();
 	}
 	else {
